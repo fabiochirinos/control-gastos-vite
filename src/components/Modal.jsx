@@ -28,8 +28,15 @@ function Modal({ setModal, animarModal, setAnimarModal, guardarGasto }) {
         setMensaje('')
       }, 3000)
       return
-    }
-    guardarGasto({nombre, cantidad, categoria})
+    } /* else if (cantidad < 0) {
+      setMensaje('La cantidad debe ser mayor a 0')
+
+      setTimeout(() => {
+        setMensaje('')
+      }, 3000)
+      return
+    } */
+    guardarGasto({ nombre, cantidad, categoria })
   }
 
   return (
@@ -85,7 +92,7 @@ function Modal({ setModal, animarModal, setAnimarModal, guardarGasto }) {
             <option value="ahorro">Ahorro</option>
             <option value="comida">Comida</option>
             <option value="casa">Casa</option>
-            <option value="varios">Gastos Varios</option>
+            <option value="gastos">Gastos Varios</option>
             <option value="ocio">Ocio</option>
             <option value="salud">Salud</option>
             <option value="suscripciones">Suscripciones</option>
