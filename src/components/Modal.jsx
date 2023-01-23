@@ -1,18 +1,30 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Mensaje from './Mensaje'
 import cerrarBtn from '../img/cerrar.svg'
+import { object } from 'prop-types'
 
-function Modal({ setModal, animarModal, setAnimarModal, guardarGasto }) {
+function Modal({ setModal, animarModal, setAnimarModal, guardarGasto, gastoEditar, setGastoEditar }) {
 
   const [mensaje, setMensaje] = useState('')
-
   const [nombre, setNombre] = useState('')
   const [cantidad, setCantidad] = useState('')
   const [categoria, setCategoria] = useState('')
+  const [fecha, setFecha] = useState('')
+  const [id, setId] = useState('')
+
+  useEffect(() => {
+    if (Object.keys(gastoEditar).length > 0) {
+      setNombre(gastoEditar.nombre)
+      setCantidad(gastoEditar.cantidad)
+      setCategoria(gastoEditar.categoria)
+      setId(gastoEditar.id)
+      setFecha(gastoEditar.fecha)
+    }
+  }, [])
 
   const handleOcultarModal = () => {
     setAnimarModal(false)
-
+    setGastoEditar({})
     setTimeout(() => {
       setModal(false)
     }, 500)
@@ -27,16 +39,17 @@ function Modal({ setModal, animarModal, setAnimarModal, guardarGasto }) {
       setTimeout(() => {
         setMensaje('')
       }, 3000)
-      return
-    } /* else if (cantidad < 0) {
-      setMensaje('La cantidad debe ser mayor a 0')
+
+    } else if (cantidad <= 0) {
+      setMensaje('La cantidad del gasto debe ser mayor a 0')
 
       setTimeout(() => {
         setMensaje('')
       }, 3000)
       return
-    } */
-    guardarGasto({ nombre, cantidad, categoria })
+    }
+
+    guardarGasto({ nombre, cantidad, categoria, id, fecha })
   }
 
   return (
@@ -53,10 +66,10 @@ function Modal({ setModal, animarModal, setAnimarModal, guardarGasto }) {
         onSubmit={handleSubmit}
         className={`formulario  ${animarModal ? 'animar' : 'cerrar'}`}
       >
-        <legend>Nuevo Gasto</legend>
+        <legend>{gastoEditar.nombre ? 'Editar Gasto' : 'Nuevo Gasto'}</legend>
         {mensaje && <Mensaje tipo='error'>{mensaje}</Mensaje>}
         <div className='campo'>
-          <label htmlFor="nombre">Nombre</label>
+          <label htmlFor="name">Nombre</label>
 
           <input
             type="text"
@@ -101,7 +114,7 @@ function Modal({ setModal, animarModal, setAnimarModal, guardarGasto }) {
 
         <input
           type="submit"
-          value='Añadir gasto'
+          value={gastoEditar.nombre ? 'Editar Gasto' : 'Añadir Gasto'}
         />
       </form>
     </div>
